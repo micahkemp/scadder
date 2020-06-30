@@ -1,4 +1,4 @@
-from scadder import SCADClassVariable, SCADClassVariableUnset
+from scadder import SCADClassVariable, SCADClassVariableObject, SCADClassVariableUnset, SCADClassVariableInvalidValue
 
 import pytest
 
@@ -20,3 +20,10 @@ def test_unset_variable():
 
     with pytest.raises(SCADClassVariableUnset):
         unset_variable.value
+
+
+def test_invalid_variable_value():
+    invalid_variable = SCADClassVariableObject()
+
+    with pytest.raises(SCADClassVariableInvalidValue):
+        invalid_variable.set_value("just a string")

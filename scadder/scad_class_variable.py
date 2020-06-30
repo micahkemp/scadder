@@ -1,9 +1,15 @@
+from .scad_class import SCADClass
+
+
 class SCADClassVariable(object):
     def __init__(self, default=None, required=False):
         self._value = default
         self._required = required
 
     def set_value(self, value):
+        if not self.validate(value):
+            raise SCADClassVariableInvalidValue
+
         self._value = value
 
     @property
@@ -20,6 +26,17 @@ class SCADClassVariable(object):
     def required(self):
         return self._required
 
+    def validate(self, value):
+        return True
+
+
+class SCADClassVariableObject(SCADClassVariable):
+    def validate(self, value):
+        isinstance(value, SCADClass)
+
 
 class SCADClassVariableUnset(Exception):
+    pass
+
+class SCADClassVariableInvalidValue(Exception):
     pass
