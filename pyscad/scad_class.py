@@ -6,10 +6,16 @@ class SCADClass(object):
 
         try:
             for arg_name, arg_value in self._scad_class_variables.items():
-                pass
+                if arg_value.required and arg_value.value is None:
+                    raise SCADClassMissingRequiredArgument
+
         except AttributeError:
-            raise UndecoratedSCADClass("Undecorated SCAD Class!")
+            raise UndecoratedSCADClass
 
 
 class UndecoratedSCADClass(Exception):
+    pass
+
+
+class SCADClassMissingRequiredArgument(Exception):
     pass
