@@ -5,6 +5,12 @@ import os
 
 
 class SCADClass(object):
+    _render_template = """
+module {{ name }}() {
+    {{ rendered_contents | indent() }}
+}
+"""
+
     def __init__(self, name, **kwargs):
         # before going any further register our name to check for conflicts
         SCADObjectTracker.instance().register_object(name, self)
@@ -30,9 +36,16 @@ class SCADClass(object):
     def filename_at_path(self, path):
         return os.path.join(path, self.filename)
 
-    def render(self, path):
-        render_template = Environment(loader=BaseLoader, undefined=StrictUndefined).from_string(self.render_template)
+    @property
+    def rendered_contents(self):
+        render_template = Environment(loader=BaseLoader, undefined=StrictUndefined).from_string(self.contents)
         rendered_contents = render_template.render(self._scad_class_variables)
+
+        return rendered_contents
+
+    def render(self, path):
+        render_template = Environment(loader=BaseLoader, undefined=StrictUndefined).from_string(self._render_template)
+        rendered_contents = render_template.render({ "name": self._name, "rendered_contents": self.rendered_contents })
 
         try:
             with open(self.filename_at_path(path), "x") as render_file:
