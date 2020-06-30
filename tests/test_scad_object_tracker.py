@@ -1,4 +1,4 @@
-from pyscad.scad_object_tracker import SCADObjectTracker, SCADObjectTrackerSingleton, SCADObjectTrackerDuplicateName
+from scadder.scad_object_tracker import SCADObjectTracker, SCADObjectTrackerSingleton, SCADObjectTrackerDuplicateName
 
 import pytest
 

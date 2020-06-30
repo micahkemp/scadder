@@ -1,6 +1,6 @@
-from pyscad import SCADConfiguration
-from pyscad import SCADClassVariable
-from pyscad import SCADClass, UndecoratedSCADClass, SCADClassMissingRequiredArgument
+from scadder import SCADConfiguration
+from scadder import SCADClassVariable
+from scadder import SCADClass, UndecoratedSCADClass, SCADClassMissingRequiredArgument
 
 import pytest
 

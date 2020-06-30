@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="pyscad",
+    name="scadder",
     packages=find_packages(),
     install_requires=[
         "jinja2"

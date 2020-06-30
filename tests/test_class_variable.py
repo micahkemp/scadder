@@ -1,4 +1,4 @@
-from pyscad import SCADClassVariable, SCADClassVariableUnset
+from scadder import SCADClassVariable, SCADClassVariableUnset
 
 import pytest
 

@@ -1,4 +1,4 @@
-from pyscad import SCADClass, SCADConfiguration, SCADClassVariable, SCADObjectFileChanged
+from scadder import SCADClass, SCADConfiguration, SCADClassVariable, SCADObjectFileChanged
 
 import pytest
 import tempfile
