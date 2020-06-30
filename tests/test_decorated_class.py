@@ -11,13 +11,13 @@ class MySCADClass(SCADClass):
 
 
 def test_default():
-    my_scad_class_obj = MySCADClass()
+    my_scad_class_obj = MySCADClass(name="test_default")
 
     assert my_scad_class_obj.my_class_variable.value == "default_value"
 
 
 def test_assigned():
-    my_scad_class_obj = MySCADClass(my_class_variable="instance_value")
+    my_scad_class_obj = MySCADClass(name="test_assigned", my_class_variable="instance_value")
 
     assert my_scad_class_obj.my_class_variable.value == "instance_value"
 
@@ -30,12 +30,12 @@ class MyRequiredArgSCADClass(SCADClass):
 
 def test_missing_required():
     with pytest.raises(SCADClassMissingRequiredArgument):
-        my_scad_class_obj = MyRequiredArgSCADClass()
+        my_scad_class_obj = MyRequiredArgSCADClass(name="test_missing_required")
 
 
 def test_missing_optional():
     # just make sure this doesn't throw an exception
-    my_scad_class_obj = MyRequiredArgSCADClass(my_required_arg="Who Cares")
+    my_scad_class_obj = MyRequiredArgSCADClass(name="test_missing_optional", my_required_arg="Who Cares")
 
 
 class MyUndecoratedSCADClass(SCADClass):
@@ -44,4 +44,4 @@ class MyUndecoratedSCADClass(SCADClass):
 
 def test_undecorated():
     with pytest.raises(UndecoratedSCADClass):
-        MyUndecoratedSCADClass()
+        MyUndecoratedSCADClass(name="test_undecorated")

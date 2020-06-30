@@ -1,5 +1,9 @@
+from .scad_object_tracker import SCADObjectTracker
+
 class SCADClass(object):
-    def __init__(self, **kwargs):
+    def __init__(self, name, **kwargs):
+        SCADObjectTracker.instance().register_object(name, self)
+
         for arg_name, arg_value in kwargs.items():
             arg_obj = getattr(self, arg_name)
             arg_obj.set_value(arg_value)
