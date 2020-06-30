@@ -7,9 +7,19 @@ class SCADClassVariable(object):
         self._value = value
 
     @property
+    def is_set(self):
+        return self._value is not None
+
+    @property
     def value(self):
+        if not self.is_set:
+            raise SCADClassVariableUnset
         return self._value
 
     @property
     def required(self):
         return self._required
+
+
+class SCADClassVariableUnset(Exception):
+    pass

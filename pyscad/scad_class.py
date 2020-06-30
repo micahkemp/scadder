@@ -1,6 +1,6 @@
 from .scad_object_tracker import SCADObjectTracker
 
-import jinja2
+from jinja2 import Environment, BaseLoader, StrictUndefined
 import os
 
 
@@ -17,7 +17,7 @@ class SCADClass(object):
 
         try:
             for arg_name, arg_value in self._scad_class_variables.items():
-                if arg_value.required and arg_value.value is None:
+                if arg_value.required and not arg_value.is_set:
                     raise SCADClassMissingRequiredArgument
 
         except AttributeError:
@@ -31,16 +31,17 @@ class SCADClass(object):
         return os.path.join(path, self.filename)
 
     def render(self, path):
-        render_contents = self.render_template
+        render_template = Environment(loader=BaseLoader, undefined=StrictUndefined).from_string(self.render_template)
+        rendered_contents = render_template.render(self._scad_class_variables)
 
         try:
             with open(self.filename_at_path(path), "x") as render_file:
-                render_file.write(render_contents)
+                render_file.write(rendered_contents)
         except FileExistsError:
             with open(self.filename_at_path(path), "r") as read_file:
                 read_contents = read_file.read()
 
-                if not read_contents == render_contents:
+                if not read_contents == rendered_contents:
                     raise SCADObjectFileChanged
 
 

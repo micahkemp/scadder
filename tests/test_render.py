@@ -1,4 +1,4 @@
-from pyscad import SCADClass, SCADConfiguration, SCADObjectFileChanged
+from pyscad import SCADClass, SCADConfiguration, SCADClassVariable, SCADObjectFileChanged
 
 import pytest
 import tempfile
@@ -6,15 +6,15 @@ import tempfile
 
 @SCADConfiguration()
 class MyRenderableSCADClass(SCADClass):
-    render_template = "blah"
+    radius = SCADClassVariable()
+    render_template = "Radius: {{ radius.value }}"
 
 
-my_renderable_object = MyRenderableSCADClass(name="my_renderable_object")
+my_renderable_object = MyRenderableSCADClass(name="my_renderable_object", radius=10)
 
 
 @pytest.fixture(scope="module")
 def temp_directory_path():
-    # TODO - fix dir="."
     with tempfile.TemporaryDirectory() as temp_dir_name:
         yield temp_dir_name
 
@@ -22,6 +22,11 @@ def temp_directory_path():
 # first render of this object should not raise an exception
 def test_render(temp_directory_path):
     my_renderable_object.render(path=temp_directory_path)
+
+    with open(my_renderable_object.filename_at_path(temp_directory_path), "r") as rendered_file:
+        rendered_contents = rendered_file.read()
+
+        assert rendered_contents == "Radius: 10"
 
 
 # second render of this object, with the same contents, should not raise an exception
