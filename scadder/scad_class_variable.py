@@ -32,7 +32,7 @@ class SCADClassVariable(object):
 
 class SCADClassVariableObject(SCADClassVariable):
     def validate(self, value):
-        isinstance(value, SCADClass)
+        return isinstance(value, SCADClass)
 
 
 class SCADClassVariableUnset(Exception):

@@ -1,4 +1,5 @@
 from scadder import SCADClassVariable, SCADClassVariableObject, SCADClassVariableUnset, SCADClassVariableInvalidValue
+from scadder import SCADConfiguration, SCADClass
 
 import pytest
 
@@ -20,6 +21,18 @@ def test_unset_variable():
 
     with pytest.raises(SCADClassVariableUnset):
         unset_variable.value
+
+
+@SCADConfiguration()
+class SimpleObject(SCADClass):
+    pass
+
+
+def test_valid_variable_value():
+    valid_variable = SCADClassVariableObject()
+    valid_value = SimpleObject(name="valid_value")
+
+    valid_variable.set_value(valid_value)
 
 
 def test_invalid_variable_value():
