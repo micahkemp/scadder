@@ -1,6 +1,6 @@
 from pyscad import SCADConfiguration
 from pyscad import SCADClassVariable
-from pyscad import SCADClass
+from pyscad import SCADClass, UndecoratedSCADClass
 
 import pytest
 
@@ -27,5 +27,5 @@ class MyUndecoratedSCADClass(SCADClass):
 
 
 def test_undecorated():
-    with pytest.raises(Exception):
+    with pytest.raises(UndecoratedSCADClass):
         MyUndecoratedSCADClass()
