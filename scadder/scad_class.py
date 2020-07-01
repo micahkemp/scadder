@@ -6,9 +6,18 @@ import os
 
 class SCADClass(object):
     _render_template = """
+// required modules
+{% for required_module in required_modules %}
+use <{{ required_module.value.filename }}>
+{% endfor %}
+// module definition
 module {{ name }}() {
     {{ rendered_contents | indent() }}
 }
+
+// call module when run directly
+{{ name }}();
+
 """
 
     def __init__(self, name, **kwargs):
@@ -42,7 +51,11 @@ module {{ name }}() {
         module_rendered_contents = module_render_template.render(self._scad_class_variables)
 
         render_template = Environment(loader=BaseLoader, undefined=StrictUndefined).from_string(self._render_template)
-        rendered_contents = render_template.render({ "name": self._name, "rendered_contents": module_rendered_contents })
+        rendered_contents = render_template.render({
+            "name": self._name,
+            "rendered_contents": module_rendered_contents,
+            "required_modules": self._scad_class_variable_objects.values(),
+        })
 
         return rendered_contents
 

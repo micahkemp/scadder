@@ -35,11 +35,18 @@ def test_render(temp_directory_path):
         # the compared string has very specific whitespace for testing purposes
         # if tests fail ensure there are no diffs to the whitespace here
         assert rendered_contents == """
+// required modules
+
+// module definition
 module my_renderable_object() {
     Radius: 10
 
     Height: 10
-}"""
+}
+
+// call module when run directly
+my_renderable_object();
+"""
 
 
 # second render of this object, with the same contents, should not raise an exception
