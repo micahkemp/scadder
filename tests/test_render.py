@@ -1,4 +1,4 @@
-from scadder import SCADClass, SCADConfiguration, SCADClassVariable, SCADObjectFileChanged
+from scadder import SCADClass, SCADConfiguration, SCADClassVariable, SCADClassVariableObject, SCADObjectFileChanged
 
 import pytest
 import tempfile
@@ -48,7 +48,27 @@ def test_second_render(temp_directory_path):
 
 
 # rendering this object after changing its render_template should raise an exception
-def test_second_render(temp_directory_path):
+def test_changed_render(temp_directory_path):
     my_renderable_object.contents = "changed"
     with pytest.raises(SCADObjectFileChanged):
         my_renderable_object.render(path=temp_directory_path)
+
+
+@SCADConfiguration()
+class MyDependentObject(SCADClass):
+    contents = ""
+
+
+@SCADConfiguration()
+class MyMainObject(SCADClass):
+    my_dependent = SCADClassVariableObject()
+    contents = ""
+
+
+def test_dependent_render(temp_directory_path):
+    my_dependent_object = MyDependentObject(name="my_dependent_object")
+    my_main_object = MyMainObject(name="my_main_object", my_dependent=my_dependent_object)
+
+    my_main_object.render(temp_directory_path)
+
+    assert my_dependent_object.is_rendered(path=temp_directory_path)

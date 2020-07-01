@@ -38,24 +38,30 @@ module {{ name }}() {
 
     @property
     def rendered_contents(self):
-        render_template = Environment(loader=BaseLoader, undefined=StrictUndefined).from_string(self.contents)
-        rendered_contents = render_template.render(self._scad_class_variables)
+        module_render_template = Environment(loader=BaseLoader, undefined=StrictUndefined).from_string(self.contents)
+        module_rendered_contents = module_render_template.render(self._scad_class_variables)
+
+        render_template = Environment(loader=BaseLoader, undefined=StrictUndefined).from_string(self._render_template)
+        rendered_contents = render_template.render({ "name": self._name, "rendered_contents": module_rendered_contents })
 
         return rendered_contents
 
     def render(self, path):
-        render_template = Environment(loader=BaseLoader, undefined=StrictUndefined).from_string(self._render_template)
-        rendered_contents = render_template.render({ "name": self._name, "rendered_contents": self.rendered_contents })
-
         try:
             with open(self.filename_at_path(path), "x") as render_file:
-                render_file.write(rendered_contents)
+                render_file.write(self.rendered_contents)
         except FileExistsError:
-            with open(self.filename_at_path(path), "r") as read_file:
-                read_contents = read_file.read()
+            if not self.is_rendered(path=path):
+                raise SCADObjectFileChanged
 
-                if not read_contents == rendered_contents:
-                    raise SCADObjectFileChanged
+        for object_name, object in self._scad_class_variable_objects.items():
+            object.value.render(path=path)
+
+    def is_rendered(self, path):
+        with open(self.filename_at_path(path), "r") as read_file:
+            read_contents = read_file.read()
+
+            return read_contents == self.rendered_contents
 
 
 class UndecoratedSCADClass(Exception):

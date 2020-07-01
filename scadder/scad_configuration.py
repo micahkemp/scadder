@@ -1,4 +1,4 @@
-from .scad_class_variable import SCADClassVariable
+from .scad_class_variable import SCADClassVariable, SCADClassVariableObject
 
 from inspect import getmembers
 
@@ -15,6 +15,13 @@ class SCADConfiguration(object):
 
         o._scad_class_variables = {}
         for attr_name, scad_class_variable in scad_class_variables:
-            o._scad_class_variables[attr_name] =scad_class_variable
+            o._scad_class_variables[attr_name] = scad_class_variable
+
+        is_scad_class_variable_object = lambda attribute: isinstance(attribute, SCADClassVariableObject)
+        scad_class_variable_objects = getmembers(o, is_scad_class_variable_object)
+
+        o._scad_class_variable_objects = {}
+        for attr_name, scad_class_variable in scad_class_variable_objects:
+            o._scad_class_variable_objects[attr_name] = scad_class_variable
 
         return o
