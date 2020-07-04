@@ -53,9 +53,14 @@ class SolidObjectBase:
         """
         :return: A list containing the ``formatted_value`` of each argument.
         """
+        set_arguments = []
+        for argument_name, argument_object in self.variables():
+            if argument_object.is_set:
+                set_arguments.append([argument_name, argument_object])
+
         return [
             f"{argument_name}={argument_object.formatted_value}"
-            for argument_name, argument_object in self.variables()
+            for argument_name, argument_object in set_arguments
         ]
 
     def formatted_module_arguments(self):

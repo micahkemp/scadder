@@ -25,12 +25,19 @@ class SCADVariable:
         self._validator = validator
 
     @property
+    def is_set(self):
+        """"
+        :return: True if the value has been explicitly false.  Otherwise False.
+        """
+        return self._is_set
+
+    @property
     def value(self):
         """
         Get the value set.  If this variable is required, and no default is configured, raises
         :class:`SCADMissingRequiredValue`.
         """
-        if self._is_required and not self._is_set:
+        if self._is_required and not self.is_set:
             raise SCADVariableMissingRequiredValue
 
         return self._value

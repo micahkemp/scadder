@@ -14,7 +14,10 @@ def test_init_solid_object_base():
 
 
 class SolidObjectWithSimpleAttribute(SolidObject):
-    simple_attribute = SCADVariable()
+    def __init__(self, **kwargs):
+        self.simple_attribute = SCADVariable()
+
+        super(SolidObject, self).__init__(**kwargs)
 
 
 def test_init_with_simple_attribute_empty():
@@ -23,7 +26,10 @@ def test_init_with_simple_attribute_empty():
 
 
 class SolidObjectWithRequiredAttribute(SolidObject):
-    required_attribute = SCADVariable(required=True)
+    def __init__(self, **kwargs):
+        self.required_attribute = SCADVariable(required=True)
+
+        super(SolidObject, self).__init__(**kwargs)
 
 
 def test_init_with_missing_required():
@@ -38,14 +44,23 @@ def test_module_single_argument_formatted():
 
 
 class SolidObjectWithTwoArguments(SolidObject):
-    arg1 = SCADVariable()
-    arg2 = SCADVariable()
+    def __init__(self, **kwargs):
+        self.arg1 = SCADVariable()
+        self.arg2 = SCADVariable()
+
+        super(SolidObject, self).__init__(**kwargs)
 
 
 def test_module_two_arguments_formatted():
     my_two_arg_object = SolidObjectWithTwoArguments(arg1="just a string", arg2=1.0)
 
     assert my_two_arg_object.formatted_module_arguments() == 'arg1="just a string", arg2=1.0'
+
+
+def test_module_arguments_formatted_missing():
+    my_two_arg_object = SolidObjectWithTwoArguments(arg2="arg2 string")
+
+    assert my_two_arg_object.formatted_module_arguments() == 'arg2="arg2 string"'
 
 
 def test_module_call():
