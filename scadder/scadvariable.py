@@ -27,12 +27,15 @@ class SCADVariable:
         :class:`SCADMissingRequiredValue`.
         """
         if self._is_required and not self._is_set:
-            raise SCADMissingRequiredValue
+            raise SCADVariableMissingRequiredValue
 
         return self._value
 
     @value.setter
     def value(self, value):
+        if not self.validate_value(value):
+            raise SCADVariableInvalidValueSet
+
         self._value = value
         self._is_set = True
 
@@ -44,8 +47,14 @@ class SCADVariable:
         return self._validator(value)
 
 
-class SCADMissingRequiredValue(Exception):
+class SCADVariableMissingRequiredValue(Exception):
     """
     Raised when :class:`SCADVariable` instance is asked for its value when there is none,
     and the instance is defined as required.
+    """
+
+
+class SCADVariableInvalidValueSet(Exception):
+    """
+    Raised when :class:`SCADVariable` instance is asked to set an invalid value.
     """

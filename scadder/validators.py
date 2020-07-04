@@ -2,6 +2,8 @@
 Components related to variable validation
 """
 
+from numbers import Number
+
 
 class Validators:
     """
@@ -23,4 +25,4 @@ class Validators:
         :param value: The value being validated
         :return: True if :param value: is numeric
         """
-        return isinstance(value, int)
+        return isinstance(value, Number)
