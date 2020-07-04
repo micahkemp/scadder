@@ -7,7 +7,10 @@ def test_basic_cube():
     assert my_cube.render_contents() == \
 """module my_cube() {
     cube(size=[1, 2, 3]);
-}"""
+}
+
+// call module when run directly
+my_cube();"""
 
 
 def test_cylinder_radius():
@@ -16,7 +19,10 @@ def test_cylinder_radius():
     assert my_cylinder.render_contents() == \
 """module my_cylinder() {
     cylinder(h=2, r=1);
-}"""
+}
+
+// call module when run directly
+my_cylinder();"""
 
 
 def test_cylinder_diameter():
@@ -25,4 +31,7 @@ def test_cylinder_diameter():
     assert my_cylinder.render_contents() == \
 """module my_cylinder() {
     cylinder(d=1, h=2);
-}"""
+}
+
+// call module when run directly
+my_cylinder();"""

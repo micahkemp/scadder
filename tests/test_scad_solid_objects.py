@@ -86,7 +86,10 @@ def test_solid_object_render_contents():
     assert my_solid_object.render_contents() == \
 """module my_solid_object() {
     SolidObjectBase();
-}"""
+}
+
+// call module when run directly
+my_solid_object();"""
 
 
 def test_solid_object_with_children_render_contents():
@@ -98,7 +101,10 @@ def test_solid_object_with_children_render_contents():
     SolidObjectBase() {
         my_solid_object();
     }
-}"""
+}
+
+// call module when run directly
+my_solid_with_children();"""
 
 
 @pytest.fixture(scope="module")
