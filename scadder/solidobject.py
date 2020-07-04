@@ -12,7 +12,9 @@ class SolidObjectBase:
     """
     _module = "SolidBaseObject"
 
-    def __init__(self, **kwargs):
+    def __init__(self, name, **kwargs):
+        self._object_module_name = name
+
         for arg_name, arg_value in kwargs.items():
             arg_object = getattr(self, arg_name)
             arg_object.value = arg_value
@@ -43,13 +45,13 @@ class SolidObjectBase:
         return self.attributes_of_class(SCADVariable)
 
     @property
-    def module(self):
+    def call_module(self):
         """
         :return: ``self._module``
         """
         return self._module
 
-    def module_arguments(self):
+    def call_module_arguments(self):
         """
         :return: A list containing the ``formatted_value`` of each argument.
         """
@@ -63,17 +65,18 @@ class SolidObjectBase:
             for argument_name, argument_object in set_arguments
         ]
 
-    def formatted_module_arguments(self):
+    def formatted_call_module_arguments(self):
         """
         :return: A string containing ``module_arguments`` separated by commas and spaces
         """
-        return ", ".join(self.module_arguments())
+        return ", ".join(self.call_module_arguments())
 
-    def module_call(self):
+    def formatted_call_module(self):
         """
         :return: A string containing the module name and arguments in the calling form
         """
-        return f"{self.module}({self.formatted_module_arguments()})"
+        return f"{self.call_module}({self.formatted_call_module_arguments()})"
+
 
 
 class SolidObject(SolidObjectBase):
@@ -86,13 +89,13 @@ class SolidObjectWithChildren(SolidObjectBase):
     """
     Represents a solid object derived from a transformation with children
     """
-    def __init__(self, children, **kwargs):
+    def __init__(self, name, children, **kwargs):
         for child in children:
             if not isinstance(child, SolidObjectBase):
                 raise ChildNotSolidObject
         self._children = children
 
-        super(SolidObjectWithChildren, self).__init__(**kwargs)
+        super(SolidObjectWithChildren, self).__init__(name, **kwargs)
 
 
 class ChildNotSolidObject(Exception):
