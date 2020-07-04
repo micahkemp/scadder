@@ -15,6 +15,8 @@ class SCADVariable:
         :param required: Is this variable required to be explicitly set?  Defaults to False.
         :param validator: The function to determine if a passed value is valid.
         """
+        # _value has no value until set by the setter
+        self._value = None
         self._default = default
         self._is_required = required
         self._is_set = False
