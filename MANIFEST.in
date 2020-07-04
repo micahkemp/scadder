@@ -1,1 +1,1 @@
-recursive-include scadder/templates *
+include scadder/templates/*
