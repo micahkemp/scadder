@@ -11,7 +11,13 @@ class SCADVariable:
     """
     Represents a variable passed to an OpenSCAD module
     """
-    def __init__(self, default=None, required=False, validator=Validators.validate_true):
+    def __init__(
+            self,
+            default=None,
+            required=False,
+            validator=Validators.validate_true,
+            template_as=None
+    ):
         """
         :param default: Default value for this variable.  Defaults to None.
         :param required: Is this variable required to be explicitly set?  Defaults to False.
@@ -23,6 +29,7 @@ class SCADVariable:
         self._is_required = required
         self._is_set = False
         self._validator = validator
+        self._template_as = template_as
 
     @property
     def is_set(self):
@@ -30,6 +37,14 @@ class SCADVariable:
         :return: True if the value has been explicitly false.  Otherwise False.
         """
         return self._is_set
+
+    @property
+    def template_as(self):
+        """
+        :return: The variable name to use when templating, if it should override
+        the instance variable name.
+        """
+        return self._template_as
 
     @property
     def value(self):

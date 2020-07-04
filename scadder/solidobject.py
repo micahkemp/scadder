@@ -79,7 +79,8 @@ class SolidObjectBase:
                 set_arguments.append([argument_name, argument_object])
 
         return [
-            f"{argument_name}={argument_object.formatted_value}"
+            # use argument_object.template_as if it exists, otherwise use the variable's name
+            f"{argument_object.template_as or argument_name}={argument_object.formatted_value}"
             for argument_name, argument_object in set_arguments
         ]
 
