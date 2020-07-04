@@ -2,6 +2,7 @@ from scadder.solidobject import SolidObject, SolidObjectWithChildren, ChildNotSo
 from scadder.scadvariable import SCADVariable, SCADVariableMissingRequiredValue
 
 import pytest
+import tempfile
 
 
 class BoringSolidObject(SolidObject):
@@ -66,7 +67,7 @@ def test_module_arguments_formatted_missing():
 def test_module_call():
     my_two_arg_object = SolidObjectWithTwoArguments(name="my_two_arg_object", arg1="just a string", arg2=1.0)
 
-    assert my_two_arg_object.formatted_call_module() == 'SolidBaseObject(arg1="just a string", arg2=1.0)'
+    assert my_two_arg_object.formatted_call_module() == 'SolidObjectBase(arg1="just a string", arg2=1.0)'
 
 
 def test_object_child():
@@ -78,3 +79,39 @@ def test_object_child():
 def test_non_object_child():
     with pytest.raises(ChildNotSolidObject):
         my_object_with_children = SolidObjectWithChildren(name="my_object_with_children", children=["just a string"])
+
+
+def test_solid_object_render_contents():
+    my_solid_object = SolidObject(name="my_solid_object")
+    assert my_solid_object.render_contents() == \
+"""module my_solid_object() {
+    SolidObjectBase();
+}"""
+
+
+def test_solid_object_with_children_render_contents():
+    my_child = SolidObject(name="my_solid_object")
+    my_solid_with_children = SolidObjectWithChildren(name="my_solid_with_children", children=[my_child])
+
+    assert my_solid_with_children.render_contents() == \
+"""module my_solid_with_children() {
+    SolidObjectBase() {
+        my_solid_object();
+    }
+}"""
+
+
+@pytest.fixture(scope="module")
+def temp_directory_path():
+    with tempfile.TemporaryDirectory() as temp_dir_name:
+        yield temp_dir_name
+
+
+def test_render(temp_directory_path):
+    my_object = SolidObject(name="my_solid_object")
+    my_object.render(output_path=temp_directory_path)
+
+    with open(my_object.filename_at_path(temp_directory_path), "r") as rendered_file:
+        rendered_contents = rendered_file.read()
+
+        assert rendered_contents == my_object.render_contents()
