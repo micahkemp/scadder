@@ -86,3 +86,16 @@ class SolidObjectWithChildren(SolidObjectBase):
     """
     Represents a solid object derived from a transformation with children
     """
+    def __init__(self, children, **kwargs):
+        for child in children:
+            if not isinstance(child, SolidObjectBase):
+                raise ChildNotSolidObject
+        self._children = children
+
+        super(SolidObjectWithChildren, self).__init__(**kwargs)
+
+
+class ChildNotSolidObject(Exception):
+    """
+    Raised when a non-SolidObject is passed as a child to SolidObjectWithChildren
+    """

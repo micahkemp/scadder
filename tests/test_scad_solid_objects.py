@@ -1,4 +1,4 @@
-from scadder.solidobject import SolidObject
+from scadder.solidobject import SolidObject, SolidObjectWithChildren, ChildNotSolidObject
 from scadder.scadvariable import SCADVariable, SCADVariableMissingRequiredValue
 
 import pytest
@@ -17,7 +17,7 @@ class SolidObjectWithSimpleAttribute(SolidObject):
     def __init__(self, **kwargs):
         self.simple_attribute = SCADVariable()
 
-        super(SolidObject, self).__init__(**kwargs)
+        super(SolidObjectWithSimpleAttribute, self).__init__(**kwargs)
 
 
 def test_init_with_simple_attribute_empty():
@@ -29,7 +29,7 @@ class SolidObjectWithRequiredAttribute(SolidObject):
     def __init__(self, **kwargs):
         self.required_attribute = SCADVariable(required=True)
 
-        super(SolidObject, self).__init__(**kwargs)
+        super(SolidObjectWithRequiredAttribute, self).__init__(**kwargs)
 
 
 def test_init_with_missing_required():
@@ -48,7 +48,7 @@ class SolidObjectWithTwoArguments(SolidObject):
         self.arg1 = SCADVariable()
         self.arg2 = SCADVariable()
 
-        super(SolidObject, self).__init__(**kwargs)
+        super(SolidObjectWithTwoArguments, self).__init__(**kwargs)
 
 
 def test_module_two_arguments_formatted():
@@ -67,3 +67,14 @@ def test_module_call():
     my_two_arg_object = SolidObjectWithTwoArguments(arg1="just a string", arg2=1.0)
 
     assert my_two_arg_object.module_call() == 'SolidBaseObject(arg1="just a string", arg2=1.0)'
+
+
+def test_object_child():
+    my_solid_object = SolidObject()
+
+    my_object_with_children = SolidObjectWithChildren(children=[my_solid_object])
+
+
+def test_non_object_child():
+    with pytest.raises(ChildNotSolidObject):
+        my_object_with_children = SolidObjectWithChildren(children=["just a string"])
