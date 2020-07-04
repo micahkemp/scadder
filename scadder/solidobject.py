@@ -10,6 +10,8 @@ class SolidObjectBase:
     """
     Represents a solid object
     """
+    _module = "SolidBaseObject"
+
     def __init__(self, **kwargs):
         for arg_name, arg_value in kwargs.items():
             arg_object = getattr(self, arg_name)
@@ -34,12 +36,39 @@ class SolidObjectBase:
             lambda attribute: isinstance(attribute, cls),
         )
 
-    # not @property to avoid recursion by getmembers
     def variables(self):
         """
         :return: The members of this instance of type SCADVariable
         """
         return self.attributes_of_class(SCADVariable)
+
+    @property
+    def module(self):
+        """
+        :return: ``self._module``
+        """
+        return self._module
+
+    def module_arguments(self):
+        """
+        :return: A list containing the ``formatted_value`` of each argument.
+        """
+        return [
+            f"{argument_name}={argument_object.formatted_value}"
+            for argument_name, argument_object in self.variables()
+        ]
+
+    def formatted_module_arguments(self):
+        """
+        :return: A string containing ``module_arguments`` separated by commas and spaces
+        """
+        return ", ".join(self.module_arguments())
+
+    def module_call(self):
+        """
+        :return: A string containing the module name and arguments in the calling form
+        """
+        return f"{self.module}({self.formatted_module_arguments()})"
 
 
 class SolidObject(SolidObjectBase):

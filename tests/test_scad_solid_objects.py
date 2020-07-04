@@ -29,3 +29,26 @@ class SolidObjectWithRequiredAttribute(SolidObject):
 def test_init_with_missing_required():
     with pytest.raises(SCADVariableMissingRequiredValue):
         my_object_with_missing_required = SolidObjectWithRequiredAttribute()
+
+
+def test_module_single_argument_formatted():
+    my_simple_object = SolidObjectWithSimpleAttribute(simple_attribute="simple value")
+
+    assert my_simple_object.formatted_module_arguments() == 'simple_attribute="simple value"'
+
+
+class SolidObjectWithTwoArguments(SolidObject):
+    arg1 = SCADVariable()
+    arg2 = SCADVariable()
+
+
+def test_module_two_arguments_formatted():
+    my_two_arg_object = SolidObjectWithTwoArguments(arg1="just a string", arg2=1.0)
+
+    assert my_two_arg_object.formatted_module_arguments() == 'arg1="just a string", arg2=1.0'
+
+
+def test_module_call():
+    my_two_arg_object = SolidObjectWithTwoArguments(arg1="just a string", arg2=1.0)
+
+    assert my_two_arg_object.module_call() == 'SolidBaseObject(arg1="just a string", arg2=1.0)'
