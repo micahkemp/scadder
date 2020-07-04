@@ -10,7 +10,7 @@ class SolidObjectBase:
     """
     Represents a solid object
     """
-    _module = "SolidBaseObject"
+    _call_module = "SolidBaseObject"
 
     def __init__(self, name, **kwargs):
         self._object_module_name = name
@@ -47,9 +47,9 @@ class SolidObjectBase:
     @property
     def call_module(self):
         """
-        :return: ``self._module``
+        :return: ``self._call_module``
         """
-        return self._module
+        return self._call_module
 
     def call_module_arguments(self):
         """
