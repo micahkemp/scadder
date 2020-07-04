@@ -2,6 +2,8 @@
 Components related to variables passed to OpenSCAD modules
 """
 
+from numbers import Number
+
 from .validators import Validators
 
 
@@ -48,6 +50,20 @@ class SCADVariable:
         """
         return self._validator(value)
 
+    @property
+    def formatted_value(self):
+        """
+        :return: The ``value`` property formatted appropriately for passing in module arguments.
+        """
+        # no quotes necessary
+        if isinstance(self.value, Number):
+            return self.value
+
+        if isinstance(self.value, str):
+            return f'"{self.value}"'
+
+        raise SCADVariableUnknownValueType
+
 
 class SCADVariableMissingRequiredValue(Exception):
     """
@@ -59,4 +75,10 @@ class SCADVariableMissingRequiredValue(Exception):
 class SCADVariableInvalidValueSet(Exception):
     """
     Raised when :class:`SCADVariable` instance is asked to set an invalid value.
+    """
+
+class SCADVariableUnknownValueType(Exception):
+    """
+    Raised when :class:`SCADVariable` instance is asked for its formatted_value for an unknown
+    typed value.
     """
