@@ -127,10 +127,14 @@ class SolidObjectBase:
         :return: True if the rendered file is present and as expected at the path
         provided.  Otherwise False.
         """
-        with open(self.filename_at_path(path), "r") as read_file:
-            read_contents = read_file.read()
+        try:
+            with open(self.filename_at_path(path), "r") as read_file:
+                read_contents = read_file.read()
 
             return read_contents == self.render_contents()
+        # if the file doesn't exist it hasn't been rendered
+        except FileNotFoundError:
+            return False
 
     def render(self, output_path):
         """

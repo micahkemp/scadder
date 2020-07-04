@@ -109,7 +109,12 @@ def temp_directory_path():
 
 def test_render(temp_directory_path):
     my_object = SolidObject(name="my_solid_object")
+
+    assert not my_object.is_rendered(path=temp_directory_path)
+
     my_object.render(output_path=temp_directory_path)
+
+    assert my_object.is_rendered(path=temp_directory_path)
 
     with open(my_object.filename_at_path(temp_directory_path), "r") as rendered_file:
         rendered_contents = rendered_file.read()
