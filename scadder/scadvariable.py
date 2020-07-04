@@ -67,7 +67,12 @@ class SCADVariable:
             return self.value
 
         if isinstance(self.value, str):
+            # surround resulting string in double quotes
             return f'"{self.value}"'
+
+        if isinstance(self.value, list):
+            # explicitly ask for stringification here
+            return f"{self.value}"
 
         raise SCADVariableUnknownValueType
 

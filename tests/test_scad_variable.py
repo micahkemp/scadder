@@ -39,6 +39,28 @@ def test_set_non_numeric_raises_invalid():
         my_variable.value = "just a string"
 
 
+def test_set_list():
+    my_variable = SCADVariable(validator=Validators.validate_list_numeric)
+
+    # none of these should raise an exception
+    my_variable.value = []
+    my_variable.value = [1, 2.0, -1]
+
+
+def test_set_non_list():
+    my_variable = SCADVariable(validator=Validators.validate_list_numeric)
+
+    with pytest.raises(SCADVariableInvalidValueSet):
+        my_variable.value = "not a list"
+
+
+def test_set_list_non_numeric():
+    my_variable = SCADVariable(validator=Validators.validate_list_numeric)
+
+    with pytest.raises(SCADVariableInvalidValueSet):
+        my_variable.value = ["not a number"]
+
+
 def test_formatted_number():
     my_variable = SCADVariable()
 
@@ -53,6 +75,14 @@ def test_formatted_string():
     my_variable.value = "just a string"
 
     assert my_variable.formatted_value == '"just a string"'
+
+
+def test_formatted_list_numbers():
+    my_variable = SCADVariable()
+
+    my_variable.value = [1.0, 2, -1, "and a string"]
+
+    assert my_variable.formatted_value == "[1.0, 2, -1, 'and a string']"
 
 
 def test_formatted_unknown():
