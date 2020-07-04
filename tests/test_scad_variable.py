@@ -32,7 +32,7 @@ def test_set_numeric():
     my_variable.value = 0
 
 
-def test_raises_invalid():
+def test_set_non_numeric_raises_invalid():
     my_variable = SCADVariable(validator=Validators.validate_numeric)
 
     with pytest.raises(SCADVariableInvalidValueSet):
