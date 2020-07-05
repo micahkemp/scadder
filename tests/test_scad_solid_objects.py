@@ -1,3 +1,5 @@
+import os
+
 from scadder.solidobject import SolidObject, SolidObjectWithChildren, ChildNotSolidObject
 from scadder.scadvariable import SCADVariable, SCADVariableMissingRequiredValue
 
@@ -97,7 +99,10 @@ def test_solid_object_with_children_render_contents():
     my_solid_with_children = SolidObjectWithChildren(name="my_solid_with_children", children=[my_child])
 
     assert my_solid_with_children.render_contents() == \
-"""module my_solid_with_children() {
+"""// use modules
+use <my_solid_object/my_solid_object.scad>
+
+module my_solid_with_children() {
     SolidObjectBase() {
         my_solid_object();
     }
@@ -114,13 +119,16 @@ def temp_directory_path():
 
 
 def test_render(temp_directory_path):
-    my_object = SolidObject(name="my_solid_object")
+    my_child = SolidObject(name="my_child")
+    my_object = SolidObjectWithChildren(name="my_object", children=[my_child])
 
     assert not my_object.is_rendered(path=temp_directory_path)
+    assert not my_child.is_rendered(path=os.path.join(temp_directory_path, my_child.module_name))
 
     my_object.render(output_path=temp_directory_path)
 
     assert my_object.is_rendered(path=temp_directory_path)
+    assert my_child.is_rendered(path=os.path.join(temp_directory_path, my_child.module_name))
 
     with open(my_object.filename_at_path(temp_directory_path), "r") as rendered_file:
         rendered_contents = rendered_file.read()

@@ -150,6 +150,7 @@ class SolidObjectBase:
             if not self.is_rendered(path=output_path):
                 raise TemplatedFileChanged
 
+
 class SolidObject(SolidObjectBase):
     """
     Represents a solid object derived from a module with no children
@@ -180,6 +181,19 @@ class SolidObjectWithChildren(SolidObjectBase):
         :return: The list of children passed in during creation.
         """
         return self._children
+
+    def render(self, output_path):
+        super(SolidObjectWithChildren, self).render(output_path=output_path)
+
+        for child in self.children:
+            child_output_path = os.path.join(output_path, child.module_name)
+            try:
+                os.mkdir(child_output_path)
+            except FileExistsError:
+                # already exists is good enough
+                pass
+
+            child.render(output_path=child_output_path)
 
 
 class ChildNotSolidObject(Exception):
