@@ -2,7 +2,7 @@ import pytest
 import tempfile
 
 from scadder.model import Model
-from scadder.solidobjecttypes import Cube
+from scadder.componenttypes import Cube
 
 
 def test_unimplemented_component():

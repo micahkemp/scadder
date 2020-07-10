@@ -1,5 +1,5 @@
 """
-Collection of SolidObject types
+Collection of Component implementations
 """
 from .component import Component
 from .parameter import Parameter

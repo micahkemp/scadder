@@ -1,4 +1,4 @@
-from scadder.solidobjecttypes import Cube, Cylinder
+from scadder.componenttypes import Cube, Cylinder
 
 
 def test_basic_cube():
