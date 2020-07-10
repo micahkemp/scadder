@@ -21,7 +21,14 @@ class Component:
 
         for arg_name, arg_value in kwargs.items():
             arg_object = getattr(self, arg_name)
-            arg_object.value = arg_value
+            # get a new instance of Parameter suitable to set the value on
+            # required due to how we use class variables for the parameter configuration
+            instance_parameter = arg_object.init_copy()
+            # set the value on the instance_parameter object to avoid its value bleeding over
+            # to other instances of this Component
+            instance_parameter.value = arg_value
+            # and override our instance's named variable to point to the instance object
+            setattr(self, arg_name, instance_parameter)
 
         for attr_name, attr_object in self.parameters():
             try:

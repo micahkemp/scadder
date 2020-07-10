@@ -22,6 +22,7 @@ class Parameter:
         :param default: Default value for this parameter.  Defaults to None.
         :param required: Is this parameter required to be explicitly set?  Defaults to False.
         :param validator: The function to determine if a passed value is valid.
+        :param template_as: The name of the parameter to use when templating.  Defaults to None.
         """
         # _value has no value until set by the setter
         self._value = None
@@ -90,6 +91,21 @@ class Parameter:
             return f"{self.value}"
 
         raise ParameterUnknownValueType
+
+    def init_copy(self):
+        """
+        Create a new instance of this Parameter, suitable to use as an instance variable to override
+        the class variable.  Setting a value on a class variable instance will result in all
+        instances of that class having that value going forward, which isn't what we want.
+        :return: A new instance of Parameter with the same configuration as this one, as allowed
+        by ``__init__``.
+        """
+        return Parameter(
+            default=self._default,
+            required=self._is_required,
+            validator=self._validator,
+            template_as=self._template_as,
+        )
 
 
 class ParameterMissingRequiredValue(Exception):
