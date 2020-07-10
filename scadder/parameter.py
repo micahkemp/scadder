@@ -1,5 +1,5 @@
 """
-Components related to variables passed to OpenSCAD modules
+Components related to parameters passed to OpenSCAD modules
 """
 
 from numbers import Number
@@ -7,9 +7,9 @@ from numbers import Number
 from .validators import Validators
 
 
-class SCADVariable:
+class Parameter:
     """
-    Represents a variable passed to an OpenSCAD module
+    Represents a parameter passed to an OpenSCAD module
     """
     def __init__(
             self,
@@ -19,8 +19,8 @@ class SCADVariable:
             template_as=None
     ):
         """
-        :param default: Default value for this variable.  Defaults to None.
-        :param required: Is this variable required to be explicitly set?  Defaults to False.
+        :param default: Default value for this parameter.  Defaults to None.
+        :param required: Is this parameter required to be explicitly set?  Defaults to False.
         :param validator: The function to determine if a passed value is valid.
         """
         # _value has no value until set by the setter
@@ -41,7 +41,7 @@ class SCADVariable:
     @property
     def template_as(self):
         """
-        :return: The variable name to use when templating, if it should override
+        :return: The parameter name to use when templating, if it should override
         the instance variable name.
         """
         return self._template_as
@@ -49,18 +49,18 @@ class SCADVariable:
     @property
     def value(self):
         """
-        Get the value set.  If this variable is required, and no default is configured, raises
+        Get the value set.  If this parameter is required, and no default is configured, raises
         :class:`SCADMissingRequiredValue`.
         """
         if self._is_required and not self.is_set:
-            raise SCADVariableMissingRequiredValue
+            raise ParameterMissingRequiredValue
 
         return self._value
 
     @value.setter
     def value(self, value):
         if not self.validate_value(value):
-            raise SCADVariableInvalidValueSet
+            raise ParameterInvalidValueSet
 
         self._value = value
         self._is_set = True
@@ -89,23 +89,23 @@ class SCADVariable:
             # explicitly ask for stringification here
             return f"{self.value}"
 
-        raise SCADVariableUnknownValueType
+        raise ParameterUnknownValueType
 
 
-class SCADVariableMissingRequiredValue(Exception):
+class ParameterMissingRequiredValue(Exception):
     """
-    Raised when :class:`SCADVariable` instance is asked for its value when there is none,
+    Raised when :class:`Parameter` instance is asked for its value when there is none,
     and the instance is defined as required.
     """
 
 
-class SCADVariableInvalidValueSet(Exception):
+class ParameterInvalidValueSet(Exception):
     """
-    Raised when :class:`SCADVariable` instance is asked to set an invalid value.
+    Raised when :class:`Parameter` instance is asked to set an invalid value.
     """
 
-class SCADVariableUnknownValueType(Exception):
+class ParameterUnknownValueType(Exception):
     """
-    Raised when :class:`SCADVariable` instance is asked for its formatted_value for an unknown
+    Raised when :class:`Parameter` instance is asked for its formatted_value for an unknown
     typed value.
     """

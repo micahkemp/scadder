@@ -6,7 +6,7 @@ import os
 
 from jinja2 import Environment, PackageLoader
 
-from .scadvariable import SCADVariable, SCADVariableMissingRequiredValue
+from .parameter import Parameter, ParameterMissingRequiredValue
 
 
 class Component:
@@ -23,11 +23,11 @@ class Component:
             arg_object = getattr(self, arg_name)
             arg_object.value = arg_value
 
-        for attr_name, attr_object in self.variables():
+        for attr_name, attr_object in self.parameters():
             try:
                 # just need some way of calling attr_object.value to see if it raises an exception
                 isinstance(attr_object.value, object)
-            except SCADVariableMissingRequiredValue as raised_exception:
+            except ParameterMissingRequiredValue as raised_exception:
                 print(f"{attr_name} is a required parameter")
                 raise raised_exception
 
@@ -56,11 +56,11 @@ class Component:
             lambda attribute: isinstance(attribute, cls),
         )
 
-    def variables(self):
+    def parameters(self):
         """
-        :return: The members of this instance of type SCADVariable
+        :return: The members of this instance of type Parameter
         """
-        return self.attributes_of_class(SCADVariable)
+        return self.attributes_of_class(Parameter)
 
     @property
     def call_module(self):
@@ -74,7 +74,7 @@ class Component:
         :return: A list containing the ``formatted_value`` of each argument.
         """
         set_arguments = []
-        for argument_name, argument_object in self.variables():
+        for argument_name, argument_object in self.parameters():
             if argument_object.is_set:
                 set_arguments.append([argument_name, argument_object])
 

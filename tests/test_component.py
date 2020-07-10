@@ -1,7 +1,7 @@
 import os
 
 from scadder.component import Component, ComponentWithChildren, ChildNotComponent
-from scadder.scadvariable import SCADVariable, SCADVariableMissingRequiredValue
+from scadder.parameter import Parameter, ParameterMissingRequiredValue
 
 import pytest
 import tempfile
@@ -18,7 +18,7 @@ def test_init_component():
 
 class ComponentWithSimpleAttribute(Component):
     def __init__(self, name, **kwargs):
-        self.simple_attribute = SCADVariable()
+        self.simple_attribute = Parameter()
 
         super(ComponentWithSimpleAttribute, self).__init__(name=name, **kwargs)
 
@@ -30,13 +30,13 @@ def test_init_with_simple_attribute_empty():
 
 class ComponentWithRequiredAttribute(Component):
     def __init__(self, name, **kwargs):
-        self.required_attribute = SCADVariable(required=True)
+        self.required_attribute = Parameter(required=True)
 
         super(ComponentWithRequiredAttribute, self).__init__(name=name, **kwargs)
 
 
 def test_init_with_missing_required():
-    with pytest.raises(SCADVariableMissingRequiredValue):
+    with pytest.raises(ParameterMissingRequiredValue):
         my_component_with_missing_required = ComponentWithRequiredAttribute(name="my_component_with_missing_required")
 
 
@@ -48,8 +48,8 @@ def test_module_single_argument_formatted():
 
 class ComponentWithTwoArguments(Component):
     def __init__(self, name, **kwargs):
-        self.arg1 = SCADVariable()
-        self.arg2 = SCADVariable()
+        self.arg1 = Parameter()
+        self.arg2 = Parameter()
 
         super(ComponentWithTwoArguments, self).__init__(name=name, **kwargs)
 
