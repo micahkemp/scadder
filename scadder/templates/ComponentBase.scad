@@ -1,7 +1,7 @@
 {% block includes %}{% endblock -%}
-module {{ solid_object.module_name }}() {
+module {{ component.module_name }}() {
     {% block call_module %}{% endblock %}
 }
 
 // call module when run directly
-{{ solid_object.module_name }}();
+{{ component.module_name }}();

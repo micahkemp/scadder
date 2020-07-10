@@ -1,11 +1,11 @@
 """
 Collection of SolidObject types
 """
-from .solidobject import SolidObject
+from .component import Component
 from .scadvariable import SCADVariable, Validators
 
 
-class Cube(SolidObject):
+class Cube(Component):
     """
     Cube
     """
@@ -16,7 +16,7 @@ class Cube(SolidObject):
         super(Cube, self).__init__(name=name, **kwargs)
 
 
-class Cylinder(SolidObject):
+class Cylinder(Component):
     """
     Cylinder
     """

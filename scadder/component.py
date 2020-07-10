@@ -1,5 +1,5 @@
 """
-Basic definition of solid object class
+Component things live here
 """
 from inspect import getmembers
 import os
@@ -9,15 +9,15 @@ from jinja2 import Environment, PackageLoader
 from .scadvariable import SCADVariable, SCADVariableMissingRequiredValue
 
 
-class SolidObjectBase:
+class Component:
     """
-    Represents a solid object
+    Represents a component
     """
-    _call_module = "SolidObjectBase"
+    _call_module = "Component"
 
     def __init__(self, name, **kwargs):
         self._module_name = name
-        self._template_name = "SolidObjectBase.scad"
+        self._template_name = "Component.scad"
 
         for arg_name, arg_value in kwargs.items():
             arg_object = getattr(self, arg_name)
@@ -120,7 +120,7 @@ class SolidObjectBase:
         )
 
         template = env.get_template(self.template_name)
-        return template.render({"solid_object": self})
+        return template.render({"component": self})
 
     def is_rendered(self, path):
         """
@@ -151,28 +151,18 @@ class SolidObjectBase:
                 raise TemplatedFileChanged
 
 
-class SolidObject(SolidObjectBase):
+class ComponentWithChildren(Component):
     """
-    Represents a solid object derived from a module with no children
-    """
-    def __init__(self, name, **kwargs):
-        super(SolidObject, self).__init__(name=name, **kwargs)
-
-        self._template_name = "SolidObject.scad"
-
-
-class SolidObjectWithChildren(SolidObjectBase):
-    """
-    Represents a solid object derived from a transformation with children
+    Represents a Component derived from a transformation with children
     """
     def __init__(self, name, children, **kwargs):
-        super(SolidObjectWithChildren, self).__init__(name, **kwargs)
+        super(ComponentWithChildren, self).__init__(name, **kwargs)
 
-        self._template_name = "SolidObjectWithChildren.scad"
+        self._template_name = "ComponentWithChildren.scad"
 
         for child in children:
-            if not isinstance(child, SolidObjectBase):
-                raise ChildNotSolidObject
+            if not isinstance(child, Component):
+                raise ChildNotComponent
         self._children = children
 
     @property
@@ -183,7 +173,7 @@ class SolidObjectWithChildren(SolidObjectBase):
         return self._children
 
     def render(self, output_path):
-        super(SolidObjectWithChildren, self).render(output_path=output_path)
+        super(ComponentWithChildren, self).render(output_path=output_path)
 
         for child in self.children:
             child_output_path = os.path.join(output_path, child.module_name)
@@ -196,9 +186,9 @@ class SolidObjectWithChildren(SolidObjectBase):
             child.render(output_path=child_output_path)
 
 
-class ChildNotSolidObject(Exception):
+class ChildNotComponent(Exception):
     """
-    Raised when a non-SolidObject is passed as a child to SolidObjectWithChildren
+    Raised when a non-Compnonent is passed as a child to ComponentWithChildren
     """
 
 class TemplatedFileChanged(Exception):
