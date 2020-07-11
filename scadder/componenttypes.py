@@ -61,3 +61,47 @@ class Mirror(ComponentWithChildren):
         validator=Validators.validate_list_numeric,
         template_as="v"
     )
+
+
+class Rotate(ComponentWithChildren):
+    """
+    Rotate
+    """
+    _call_module = "rotate"
+
+    angle = Parameter(
+        required=True,
+        validator=Validators.validate_numeric,
+        template_as="a"
+    )
+
+    vector = Parameter(
+        required=True,
+        validator=Validators.validate_list_numeric,
+        template_as="v"
+    )
+
+
+class RotateExtrude(ComponentWithChildren):
+    """
+    RotateExtrude
+    """
+    _call_module = "rotate_extrude"
+
+    angle = Parameter(
+        required=True,
+        validator=Validators.validate_numeric
+    )
+
+
+class Circle(Component):
+    """
+    Circle
+    """
+    _call_module = "circle"
+
+    radius = Parameter(
+        required=True,
+        validator=Validators.validate_numeric,
+        template_as="r"
+    )

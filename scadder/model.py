@@ -10,6 +10,13 @@ class Model:
     def __init__(self, name):
         self._name = name
 
+    @property
+    def name(self):
+        """
+        :return: The name of the model
+        """
+        return self._name
+
     def component(self):
         """
         Overload this method if your Model class has a "main" object.  Unless overloaded,
