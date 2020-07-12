@@ -40,7 +40,26 @@ class Validators:
                     # this item is not Numeric, return False
                     return False
 
-            # all items were numeric, return False
+            # all items were numeric, return True
+            return True
+
+        # not a list, return False
+        return False
+
+    @staticmethod
+    def validate_list_list_numeric(value):
+        """
+        Validates the past value is a list of a list of numeric values.
+        :param value: The value (list) being validated
+        :return: True if :param value: is a list of a list of numeric values
+        """
+
+        if isinstance(value, list):
+            for item in value:
+                if not Validators.validate_list_numeric(item):
+                    return False
+
+            # all items were lists of numeric values, return True
             return True
 
         # not a list, return False

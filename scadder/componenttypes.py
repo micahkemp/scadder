@@ -50,6 +50,13 @@ class Difference(ComponentWithChildren):
     _call_module = "difference"
 
 
+class Intersection(ComponentWithChildren):
+    """
+    Intersection
+    """
+    _call_module = "intersection"
+
+
 class Mirror(ComponentWithChildren):
     """
     Mirror
@@ -104,4 +111,16 @@ class Circle(Component):
         required=True,
         validator=Validators.validate_numeric,
         template_as="r"
+    )
+
+
+class Polygon(Component):
+    """
+    Polygon
+    """
+    _class_module = "polygon"
+
+    points = Parameter(
+        required=True,
+        validator=Validators.validate_list_list_numeric,
     )

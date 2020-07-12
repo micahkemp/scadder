@@ -61,6 +61,26 @@ def test_set_list_non_numeric():
         my_variable.value = ["not a number"]
 
 
+def test_set_list_list_numeric():
+    my_variable = Parameter(validator=Validators.validate_list_list_numeric)
+
+    my_variable.value = [[1, 2, 3], [3, 4, 5]]
+
+
+def test_set_list_non_list():
+    my_variable = Parameter(validator=Validators.validate_list_list_numeric)
+
+    with pytest.raises(ParameterInvalidValueSet):
+        my_variable.value = [1, 2, 3]
+
+
+def test_set_list_list_non_numeric():
+    my_variable = Parameter(validator=Validators.validate_list_list_numeric)
+
+    with pytest.raises(ParameterInvalidValueSet):
+        my_variable.value = [[1, 2, 3], ["1", 2, 3]]
+
+
 def test_formatted_number():
     my_variable = Parameter()
 
