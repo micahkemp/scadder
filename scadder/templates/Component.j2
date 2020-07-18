@@ -1,0 +1,4 @@
+{% extends "ComponentBase.j2" %}
+{% block call_module -%}
+    {{ component.module_name }}({{ component.arguments_string }});
+{%- endblock %}

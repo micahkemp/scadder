@@ -1,0 +1,14 @@
+{% extends "ComponentBase.j2" %}
+{% block includes -%}
+// use modules
+{% for child in component.children -%}
+use <{{ child.name }}/{{ child.filename }}>
+{% endfor %}
+{% endblock %}
+{% block call_module -%}
+    {{ component.module_name }}({{ component.arguments_string }}) {
+        {%- for child in component.children %}
+        {{ child.name }}();
+        {%- endfor %}
+    }
+{%- endblock %}

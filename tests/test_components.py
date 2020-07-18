@@ -45,6 +45,15 @@ def test_cube_module_name(cube_1_2_3):
     assert cube_1_2_3.module_name == "cube"
 
 
+def test_cube_rendered_contents(cube_1_2_3):
+    assert cube_1_2_3.rendered_contents() == """module cube_1_2_3() {
+    cube(size=[1, 2, 3]);
+}
+
+// call module when run directly
+cube_1_2_3();"""
+
+
 def test_cube_name_none_given():
     cube_no_name_given = Cube()
 

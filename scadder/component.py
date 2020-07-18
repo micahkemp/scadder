@@ -2,6 +2,7 @@
 Base Component classes
 """
 import json
+from jinja2 import Environment, PackageLoader
 
 
 class ComponentBase:
@@ -82,6 +83,21 @@ class ComponentBase:
         """
         return self.__class__.__name__.lower()
 
+    @property
+    def filename(self):
+        return f"{self.name}.scad"
+
+    def rendered_contents(self):
+        """
+        :return: The rendered contents of the template.
+        """
+        env = Environment(
+            loader=PackageLoader('scadder'),
+        )
+
+        template = env.get_template(self._template_name)
+        return template.render({"component": self})
+
 
 class Component(ComponentBase):
     """
@@ -95,3 +111,22 @@ class ComponentWithChildren(Component):
     Component with children
     """
     _template_name = "ComponentWithChildren.j2"
+
+    def __init__(self, name, children):
+        super(ComponentWithChildren, self).__init__(name=name)
+
+        self.children = []
+        self.add_children(children)
+
+    def add_child(self, child):
+        if not isinstance(child, ComponentBase):
+            raise InvalidChild
+        self.children.append(child)
+
+    def add_children(self, children):
+        for child in children:
+            self.add_child(child)
+
+
+class InvalidChild(Exception):
+    pass
