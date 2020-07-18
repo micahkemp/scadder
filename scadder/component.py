@@ -10,13 +10,30 @@ class ComponentBase:
     """
     def __init__(self, name):
         self.name = name
+        self._arguments = {}
+
+    def add_argument(self, name, value):
+        """
+        Add an argument to be passed to the called module
+        :param name: The name of the argument when calling the module
+        :param value: The value to be used when calling the module
+        """
+        self._arguments[name] = value
+
+    def add_arguments(self, arguments):
+        """
+        Add arguments to be passed to the called module
+        :param arguments: A dictionary of arguments and their values to pass to the module
+        """
+        for name, value in arguments.items():
+            self.add_argument(name, value)
 
     @property
     def arguments(self):
         """
         :return: Dictionary of keys/values that should be passed to the called module
         """
-        return {}
+        return self._arguments
 
     def argument_formatted(self, argument_name):
         """
