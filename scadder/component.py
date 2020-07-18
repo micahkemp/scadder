@@ -23,9 +23,11 @@ class ComponentBase:
         :param argument_name: The name of the argument to return the value of
         :return: The formatted value, suitable for use in a .scad file
         """
-        # the JSON-formatted representation of any argument should be suitable to use in a .scad
-        # file
-        return json.dumps(self.arguments[argument_name])
+        # the JSON-formatted representation should be suitable to use in a .scad for strings
+        if isinstance(self.arguments[argument_name], str):
+            return json.dumps(self.arguments[argument_name])
+
+        return self.arguments[argument_name]
 
     @property
     def arguments_formatted(self):
