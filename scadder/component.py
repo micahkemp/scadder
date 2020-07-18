@@ -8,8 +8,9 @@ class ComponentBase:
     """
     Base class for Component sub-classes
     """
-    def __init__(self, name):
-        self.name = name
+    def __init__(self, name=None):
+        # name defaults to the {module_name}_component
+        self.name = name if name else f"{self.module_name}_component"
         self._arguments = {}
 
     def add_argument(self, name, value):
@@ -72,6 +73,14 @@ class ComponentBase:
         in a .scad module call
         """
         return ", ".join(self.argument_strings)
+
+    @property
+    def module_name(self):
+        """
+        The module name to call in the .scad file. Currently defined as the class name in lowercase.
+        :return: The module name
+        """
+        return self.__class__.__name__.lower()
 
 
 class Component(ComponentBase):

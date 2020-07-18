@@ -9,7 +9,7 @@ class Cube(Component):
     """
     Cube
     """
-    def __init__(self, name, length, width, height):
+    def __init__(self, name=None, length=0, width=0, height=0):
         super(Cube, self).__init__(name=name)
 
         self.add_arguments({
@@ -25,7 +25,7 @@ class Text(Component):
     """
     Text
     """
-    def __init__(self, name, text):
+    def __init__(self, name=None, text=""):
         super(Text, self).__init__(name=name)
 
         self.add_argument("text", ValidateString.validate(text))

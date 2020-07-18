@@ -22,7 +22,7 @@ def test_cube_arguments(test_input, raises):
 
 @pytest.fixture
 def cube_1_2_3():
-    return Cube(name="cube", length=1, width=2, height=3)
+    return Cube(name="cube_1_2_3", length=1, width=2, height=3)
 
 
 def test_cube_arguments(cube_1_2_3):
@@ -35,6 +35,20 @@ def test_cube_argument_strings(cube_1_2_3):
 
 def test_cube_arguments_string(cube_1_2_3):
     assert cube_1_2_3.arguments_string == "size=[1, 2, 3]"
+
+
+def test_cube_name(cube_1_2_3):
+    assert cube_1_2_3.name == "cube_1_2_3"
+
+
+def test_cube_module_name(cube_1_2_3):
+    assert cube_1_2_3.module_name == "cube"
+
+
+def test_cube_name_none_given():
+    cube_no_name_given = Cube()
+
+    assert cube_no_name_given.name == "cube_component"
 
 
 @pytest.mark.parametrize("test_input,raises", [
@@ -66,6 +80,10 @@ def test_text_argument_formatted(text_just_a_string):
 
 def test_text_argument_strings(text_just_a_string):
     assert text_just_a_string.argument_strings == ['text="just a string"']
+
+
+def test_text_module_name(text_just_a_string):
+    assert text_just_a_string.module_name == "text"
 
 
 @pytest.fixture
