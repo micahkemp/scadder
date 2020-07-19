@@ -1,4 +1,5 @@
-from scadder.groupedarguments import XYZ
+from scadder.coordinates import XYZ
+
 
 def test_xyz_angle_degrees():
     # simple tests to ensure we ordered the X/Y correctly for the atan2 function
