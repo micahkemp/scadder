@@ -11,10 +11,11 @@ class ComponentBase:
     Base class for Component sub-classes
     """
     _template_name = "ComponentBase.j2"
+    _module_name = None
 
     def __init__(self, name=None):
         # name defaults to the {module_name}_component
-        self.name = name if name else f"{self.module_name}_component"
+        self.name = name if name else f"{self.class_module_name}_component"
         self._arguments = {}
 
     def add_argument(self, name, value):
@@ -81,8 +82,18 @@ class ComponentBase:
     @property
     def module_name(self):
         """
-        The module name to call in the .scad file. Currently defined as the class name in lowercase.
+        The module name to call in the .scad file.
         :return: The module name
+        """
+        if self._module_name:
+            return self._module_name
+
+        return self.class_module_name
+
+    @property
+    def class_module_name(self):
+        """
+        :return: The class name in lowercase
         """
         return self.__class__.__name__.lower()
 

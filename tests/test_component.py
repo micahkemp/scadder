@@ -38,3 +38,11 @@ def test_argument_strings(my_component):
 
 def test_arguments_string(my_component):
     assert my_component.arguments_string == 'length=10, text="10"'
+
+
+def test_override_module_name():
+    class OverriddenModuleName(Component):
+        _module_name = "overridden"
+
+    assert OverriddenModuleName().module_name == "overridden"
+    assert OverriddenModuleName().filename == "overriddenmodulename_component.scad"
