@@ -9,6 +9,8 @@ class ComponentBase:
     """
     Base class for Component sub-classes
     """
+    _template_name = "ComponentBase.j2"
+
     def __init__(self, name=None):
         # name defaults to the {module_name}_component
         self.name = name if name else f"{self.module_name}_component"
@@ -85,6 +87,9 @@ class ComponentBase:
 
     @property
     def filename(self):
+        """
+        :return: The filename for this component
+        """
         return f"{self.name}.scad"
 
     def rendered_contents(self):
@@ -119,14 +124,24 @@ class ComponentWithChildren(Component):
         self.add_children(children)
 
     def add_child(self, child):
+        """
+        Add a single child to this component
+        :param child: The child to add
+        """
         if not isinstance(child, ComponentBase):
             raise InvalidChild
         self.children.append(child)
 
     def add_children(self, children):
+        """
+        Add children to this component
+        :param children: A list of children to add
+        """
         for child in children:
             self.add_child(child)
 
 
 class InvalidChild(Exception):
-    pass
+    """
+    Indicates a non-child was attempted to be added to a component's children
+    """

@@ -1,7 +1,15 @@
-from scadder.coordinates import XYZ
+from scadder.coordinates import XY, XYZ
 
 
-def test_xyz_angle_degrees():
+def test_xy_list():
+    assert XY(1, 2).list() == [1, 2]
+
+
+def test_xyz_list():
+    assert XYZ(1, 2, 3).list() == [1, 2, 3]
+
+
+def test_xy_angle_degrees():
     # simple tests to ensure we ordered the X/Y correctly for the atan2 function
-    assert XYZ(1, 1, 0).angle_xy_deg == 45
-    assert XYZ(1, -1, 0).angle_xy_deg == -45
+    assert XY(1, 1).angle_xy_deg == 45
+    assert XY(1, -1).angle_xy_deg == -45

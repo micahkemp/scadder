@@ -1,6 +1,6 @@
 from scadder.componentswithchildren import *
 from scadder.components import *
-from scadder.validate import *
+from scadder.coordinates import XYZ
 
 import pytest
 
@@ -15,9 +15,7 @@ def my_translate(my_cube):
     return Translate(
         name="my_translate",
         children=[my_cube],
-        vector_x=1,
-        vector_y=2,
-        vector_z=3
+        vector=XYZ(1, 2, 3),
     )
 
 

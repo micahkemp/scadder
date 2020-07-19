@@ -72,17 +72,6 @@ class XYZ(XY):
 
         self.add_coordinate("z", ValidateNumeric.validate(z_value))
 
-    @property
-    def value(self):
-        """
-        :return: List of x_value, y_value, z_value
-        """
-        return [
-            self["x"],
-            self["y"],
-            self["z"],
-        ]
-
 
 class DuplicateCoordinateName(Exception):
     """
