@@ -11,7 +11,7 @@ class ComponentBase:
     Base class for Component sub-classes
     """
     _template_name = "ComponentBase.j2"
-    _module_name = None
+    _module_name = "__undefined__"
 
     def __init__(self, name=None):
         # name defaults to the {module_name}_component
@@ -85,10 +85,8 @@ class ComponentBase:
         The module name to call in the .scad file.
         :return: The module name
         """
-        if self._module_name:
-            return self._module_name
+        return self._module_name
 
-        return self.class_module_name
 
     @property
     def class_module_name(self):
@@ -195,7 +193,7 @@ class ComponentWithChildren(Component):
         :param output_path:
         :return: The output path for the child, relative to the output_path parameter
         """
-        return os.path.join(output_path, child.module_name)
+        return os.path.join(output_path, child.name)
 
     def render(self, output_path):
         super(ComponentWithChildren, self).render(output_path=output_path)
