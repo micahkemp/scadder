@@ -1,7 +1,7 @@
 import pytest
 import tempfile
 
-from scadder.component import Component, ComponentWithChildren, RenderedFileChanged
+from scadder import Component, ComponentWithChildren, RenderedFileChanged
 
 
 @pytest.fixture

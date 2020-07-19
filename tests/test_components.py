@@ -1,5 +1,4 @@
-from scadder.components import *
-from scadder.validate import *
+from scadder import *
 
 import pytest
 

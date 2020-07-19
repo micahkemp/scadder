@@ -1,4 +1,4 @@
-from scadder.component import Component
+from scadder import Component
 
 import pytest
 

@@ -1,4 +1,4 @@
-from scadder.coordinates import XY, XYZ
+from scadder import XY, XYZ
 
 
 def test_xy_list():

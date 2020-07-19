@@ -1,6 +1,4 @@
-from scadder.componentswithchildren import *
-from scadder.components import *
-from scadder.coordinates import XYZ
+from scadder import *
 
 import pytest
 
