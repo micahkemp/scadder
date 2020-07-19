@@ -1,6 +1,7 @@
 """
 Base Component classes
 """
+import os
 import json
 from jinja2 import Environment, PackageLoader
 
@@ -103,6 +104,41 @@ class ComponentBase:
         template = env.get_template(self._template_name)
         return template.render({"component": self})
 
+    def filename_at_path(self, path):
+        """
+        :param path: The directory the file will reside in.
+        :return: The full path/filename to this module's file, based on the passed path.
+        """
+        return os.path.join(path, self.filename)
+
+    def is_rendered(self, path):
+        """
+        :param path: The path the template was or will be rendered to.
+        :return: True if the rendered file is present and as expected at the path
+        provided.  Otherwise False.
+        """
+        try:
+            with open(self.filename_at_path(path), "r") as read_file:
+                read_contents = read_file.read()
+
+            return read_contents == self.rendered_contents()
+        # if the file doesn't exist it hasn't been rendered
+        except FileNotFoundError:
+            return False
+
+    def render(self, output_path):
+        """
+        Render the result of ``render_contents`` to the filename appropriate for this module
+        in the path specified in this call.
+        :param output_path: The path to render files into.
+        """
+        try:
+            with open(self.filename_at_path(output_path), "x") as render_file:
+                render_file.write(self.rendered_contents())
+        except FileExistsError:
+            if not self.is_rendered(path=output_path):
+                raise RenderedFileChanged
+
 
 class Component(ComponentBase):
     """
@@ -117,11 +153,12 @@ class ComponentWithChildren(Component):
     """
     _template_name = "ComponentWithChildren.j2"
 
-    def __init__(self, name, children):
+    def __init__(self, name=None, children=None):
         super(ComponentWithChildren, self).__init__(name=name)
 
         self.children = []
-        self.add_children(children)
+        if children:
+            self.add_children(children)
 
     def add_child(self, child):
         """
@@ -140,8 +177,36 @@ class ComponentWithChildren(Component):
         for child in children:
             self.add_child(child)
 
+    @staticmethod
+    def child_output_path(child, output_path):
+        """
+        :param child:
+        :param output_path:
+        :return: The output path for the child, relative to the output_path parameter
+        """
+        return os.path.join(output_path, child.module_name)
+
+    def render(self, output_path):
+        super(ComponentWithChildren, self).render(output_path=output_path)
+
+        for child in self.children:
+            try:
+                os.mkdir(self.child_output_path(child=child, output_path=output_path))
+            except FileExistsError:
+                # already exists is good enough
+                pass
+
+            child.render(output_path=self.child_output_path(child=child, output_path=output_path))
+
 
 class InvalidChild(Exception):
     """
     Indicates a non-child was attempted to be added to a component's children
+    """
+
+
+class RenderedFileChanged(Exception):
+    """
+    Raised when a rendered file exists with different content than is attempting
+    to be rendered.
     """
