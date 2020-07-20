@@ -1,7 +1,7 @@
 """
 Cube
 """
-from ..component import Component
+from ..component import Component, InvalidParameters
 from ..validate import ValidateNumeric
 
 
@@ -11,7 +11,10 @@ class Cube(Component):
     """
     _module_name = "cube"
 
-    def __init__(self, name=None, length=0, width=0, height=0):
+    def __init__(self, name=None, length=None, width=None, height=None):
+        if not length or not width or not height:
+            raise InvalidParameters("Must set length, width, and height")
+
         super(Cube, self).__init__(name=name)
 
         self.add_arguments({

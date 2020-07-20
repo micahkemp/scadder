@@ -219,3 +219,9 @@ class RenderedFileChanged(Exception):
     Raised when a rendered file exists with different content than is attempting
     to be rendered.
     """
+
+
+class InvalidParameters(Exception):
+    """
+    Raised when a component instance is created with an invalid combination of parameters
+    """

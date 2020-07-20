@@ -18,7 +18,11 @@ def my_translate(my_cube):
 
 
 def test_translate_rendered_contents(my_translate):
-    assert my_translate.rendered_contents() == """// use modules
+    assert my_translate.rendered_contents() == """// uncomment before exporting to STL
+// $fa = 1;
+// $fs = 0.4;
+
+// use modules
 use <my_cube/my_cube.scad>
 
 module my_translate() {

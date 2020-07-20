@@ -11,6 +11,7 @@ from .extrusions import *
 from .primitives3d import *
 from .primitives2d import *
 from .transformations import *
+from .booleans import *
 
 # things built on top of primitives
 from .custom2d import *

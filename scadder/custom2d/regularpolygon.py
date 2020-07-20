@@ -5,11 +5,18 @@ from math import sin, cos, radians
 
 from ..primitives2d import Polygon
 from ..coordinates import XY
+from ..component import InvalidParameters
 
 
 class RegularPolygon(Polygon):
     """Regular Polygon"""
-    def __init__(self, name=None, radius=1, sides=3):
+    def __init__(self, name=None, radius=None, sides=None):
+        if not radius:
+            raise InvalidParameters("Must set radius")
+
+        if not sides or sides < 3:
+            raise InvalidParameters("Must set sides >= 3")
+
         self.radius = radius
         self.sides = sides
 
@@ -66,7 +73,7 @@ class Triangle(RegularPolygon):
     """
     Triangle
     """
-    def __init__(self, name=None, radius=1):
+    def __init__(self, name=None, radius=None):
         super(Triangle, self).__init__(name=name, radius=radius, sides=3)
 
 
@@ -74,12 +81,12 @@ class Hexagon(RegularPolygon):
     """
     Hexagon
     """
-    def __init__(self, name=None, radius=1):
+    def __init__(self, name=None, radius=None):
         super(Hexagon, self).__init__(name=name, radius=radius, sides=6)
 
 class Octagon(RegularPolygon):
     """
     Octagon
     """
-    def __init__(self, name=None, radius=1):
+    def __init__(self, name=None, radius=None):
         super(Octagon, self).__init__(name=name, radius=radius, sides=8)

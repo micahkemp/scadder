@@ -1,8 +1,7 @@
 """
 Translate
 """
-from ..component import ComponentWithChildren
-from ..coordinates import XYZ
+from ..component import ComponentWithChildren, InvalidParameters
 
 
 class Translate(ComponentWithChildren):
@@ -12,9 +11,10 @@ class Translate(ComponentWithChildren):
     _module_name = "translate"
 
     def __init__(self, name=None, children=None, vector=None):
-        super(Translate, self).__init__(name=name, children=children)
+        if not vector:
+            raise InvalidParameters("Must set vector")
 
-        vector = vector if vector else XYZ(0, 0, 0)
+        super(Translate, self).__init__(name=name, children=children)
 
         self.add_arguments({
             "v": vector.list(),

@@ -45,7 +45,11 @@ def test_cube_module_name(cube_1_2_3):
 
 
 def test_cube_rendered_contents(cube_1_2_3):
-    assert cube_1_2_3.rendered_contents() == """module cube_1_2_3() {
+    assert cube_1_2_3.rendered_contents() == """// uncomment before exporting to STL
+// $fa = 1;
+// $fs = 0.4;
+
+module cube_1_2_3() {
     cube(size=[1, 2, 3]);
 }
 
@@ -54,7 +58,7 @@ cube_1_2_3();"""
 
 
 def test_cube_name_none_given():
-    cube_no_name_given = Cube()
+    cube_no_name_given = Cube(length=1, width=1, height=1)
 
     assert cube_no_name_given.name == "cube_component"
 
