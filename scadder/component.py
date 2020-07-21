@@ -146,7 +146,7 @@ class ComponentBase:
                 render_file.write(self.rendered_contents())
         except FileExistsError:
             if not self.is_rendered(path=output_path):
-                raise RenderedFileChanged
+                raise RenderedFileChanged(self.filename_at_path(output_path))
 
 
 class Component(ComponentBase):
